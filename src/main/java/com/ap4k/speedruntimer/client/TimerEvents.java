@@ -11,7 +11,6 @@ public final class TimerEvents {
 
     private static final long SAVE_INTERVAL_MS = 5_000L;
 
-    private static boolean focusPaused;
     private static boolean restorePending;
     private static long lastSaveAt;
 
@@ -29,14 +28,12 @@ public final class TimerEvents {
 
     private static void join() {
         TimerState.onWorldJoin();
-        focusPaused = false;
         restorePending = true;
     }
 
     private static void leave() {
         TimerHudLayer.cancelDrag();
         TimerState.onWorldLeave();
-        focusPaused = false;
         restorePending = false;
         TimerPersistence.save(Minecraft.getInstance());
     }
@@ -54,7 +51,6 @@ public final class TimerEvents {
             }
 
             var tickRate = mc.level.tickRateManager();
-            handleFocus(mc);
             handleAutoStart(mc);
             TimerState.tick(!mc.isPaused() && tickRate.runsNormally(), tickRate.millisecondsPerTick());
             persistPeriodically(mc);
@@ -64,15 +60,11 @@ public final class TimerEvents {
 
         if (TimerKeys.RESET.consumeClick()) {
             TimerState.restart();
-            focusPaused = false;
             TimerPersistence.save(mc);
             msg("msg.speedruntimer.reset");
         }
         if (TimerKeys.PAUSE.consumeClick()) {
             boolean resumed = TimerState.togglePause();
-            if (resumed) {
-                focusPaused = false;
-            }
             TimerPersistence.save(mc);
             msg(resumed ? "msg.speedruntimer.resumed" : "msg.speedruntimer.paused");
         }
@@ -101,26 +93,6 @@ public final class TimerEvents {
         msg(Component.translatable("msg.speedruntimer.restored",
                 TimerHudLayer.clock(snapshot.rtaMs()),
                 TimerHudLayer.clock(snapshot.igtMs())));
-    }
-
-    /** RTA по реальному времени: без фокуса окна время не должно капать. */
-    private static void handleFocus(Minecraft mc) {
-        if (!TimerConfig.PAUSE_ON_FOCUS_LOSS.get()) {
-            focusPaused = false;
-            return;
-        }
-        if (focusPaused) {
-            if (mc.isWindowActive()) {
-                focusPaused = false;
-                TimerState.resume();
-            }
-            return;
-        }
-        if (TimerState.isRunning() && !mc.isWindowActive()) {
-            TimerState.pause();
-            focusPaused = true;
-            TimerPersistence.save(mc);
-        }
     }
 
     /** Стоим на нуле — стартуем от первого действия, как на спидран-оверлеях. */

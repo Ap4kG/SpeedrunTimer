@@ -16,7 +16,6 @@ public final class TimerConfig {
     static final ModConfigSpec.BooleanValue ENABLED;
     static final ModConfigSpec.BooleanValue SHOW_MILLISECONDS;
     static final ModConfigSpec.BooleanValue START_ON_FIRST_INPUT;
-    static final ModConfigSpec.BooleanValue PAUSE_ON_FOCUS_LOSS;
 
     static final ModConfigSpec.EnumValue<Anchor> ANCHOR;
     static final ModConfigSpec.IntValue OFFSET_X;
@@ -36,9 +35,6 @@ public final class TimerConfig {
         START_ON_FIRST_INPUT = builder
                 .comment("Запускать отсчёт по первому нажатию WASD, прыжка, атаки или использования")
                 .define("startOnFirstInput", true);
-        PAUSE_ON_FOCUS_LOSS = builder
-                .comment("Ставить таймер на паузу, когда окно игры теряет фокус (Alt+Tab)")
-                .define("pauseOnFocusLoss", true);
         builder.pop();
 
         builder.push("position");
