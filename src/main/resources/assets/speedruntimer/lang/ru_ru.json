@@ -1,0 +1,11 @@
+{
+  "key.category.speedruntimer.timer": "Speedrun Timer",
+  "key.speedruntimer.reset": "Сброс и запуск таймера",
+  "key.speedruntimer.pause": "Пауза / продолжить таймер",
+  "key.speedruntimer.toggle": "Показать / скрыть таймер",
+  "msg.speedruntimer.reset": "Таймер сброшен",
+  "msg.speedruntimer.paused": "Таймер на паузе",
+  "msg.speedruntimer.resumed": "Таймер продолжен",
+  "msg.speedruntimer.shown": "Таймер показан",
+  "msg.speedruntimer.hidden": "Таймер скрыт"
+}

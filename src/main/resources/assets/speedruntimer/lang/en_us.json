@@ -1,0 +1,11 @@
+{
+  "key.category.speedruntimer.timer": "Speedrun Timer",
+  "key.speedruntimer.reset": "Reset and start timer",
+  "key.speedruntimer.pause": "Pause / resume timer",
+  "key.speedruntimer.toggle": "Show / hide timer",
+  "msg.speedruntimer.reset": "Timer restarted",
+  "msg.speedruntimer.paused": "Timer paused",
+  "msg.speedruntimer.resumed": "Timer resumed",
+  "msg.speedruntimer.shown": "Timer shown",
+  "msg.speedruntimer.hidden": "Timer hidden"
+}
