@@ -40,7 +40,7 @@ F10 - скрыть / показать
 .\gradlew.bat build
 ```
 
-Готовый jar — `build/libs/speedruntimer-1.0.0.jar`. Запуск из среды разработки —
+Готовый jar — `build/libs/speedruntimer-1.0.1.jar`. Запуск из среды разработки —
 `.\gradlew.bat runClient`.
 
 ## Лицензия
