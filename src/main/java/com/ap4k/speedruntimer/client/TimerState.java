@@ -1,24 +1,20 @@
 package com.ap4k.speedruntimer.client;
 
-import net.minecraft.util.Mth;
-
 final class TimerState {
 
     private static boolean inWorld;
     private static boolean running;
     private static long startedAt;
     private static long accumulated;
-    private static long ticks;
+    private static double igtAccum;
 
     private TimerState() {
     }
 
     static void onWorldJoin() {
         inWorld = true;
+        // всегда стартуем с нуля и на паузе: первый тик мира не должен съесть время
         reset();
-        if (TimerConfig.AUTO_START.get()) {
-            resume();
-        }
     }
 
     static void onWorldLeave() {
@@ -30,7 +26,13 @@ final class TimerState {
         running = false;
         startedAt = 0L;
         accumulated = 0L;
-        ticks = 0L;
+        igtAccum = 0.0;
+    }
+
+    static void restore(long rtaMs, long igtMs) {
+        reset();
+        accumulated = rtaMs * 1_000_000L;
+        igtAccum = igtMs;
     }
 
     static void restart() {
@@ -74,9 +76,14 @@ final class TimerState {
         return inWorld;
     }
 
-    static void tick(boolean worldRunning) {
+    /** Таймер на нуле и не идёт — можно стартовать по первому вводу. */
+    static boolean isArmed() {
+        return !running && accumulated == 0L && igtAccum <= 0.0;
+    }
+
+    static void tick(boolean worldRunning, float msPerTick) {
         if (worldRunning && running && inWorld) {
-            ticks++;
+            igtAccum += msPerTick;
         }
     }
 
@@ -84,12 +91,16 @@ final class TimerState {
         return (accumulated + (running ? System.nanoTime() - startedAt : 0L)) / 1_000_000L;
     }
 
-    static long igtMillis(float partial) {
-        double total = ticks;
+    static long igtMillis() {
+        return (long) igtAccum;
+    }
+
+    static long igtMillis(float partial, float msPerTick) {
+        double total = igtAccum;
         if (running) {
-            total += Mth.clamp(partial, 0F, 0.999F);
+            // тик мира ещё не прошёл — добавляем его долю, иначе IGT дёргается
+            total += msPerTick * Math.min(0.999F, Math.max(0F, partial));
         }
-        // TODO: 50мс на тик зашиты, tickrate из датапаков не учитываем
-        return (long) (total * 50.0);
+        return (long) total;
     }
 }

@@ -6,6 +6,7 @@
   "msg.speedruntimer.reset": "Таймер сброшен",
   "msg.speedruntimer.paused": "Таймер на паузе",
   "msg.speedruntimer.resumed": "Таймер продолжен",
+  "msg.speedruntimer.restored": "Забег восстановлен после сбоя: RTA %s, IGT %s",
   "msg.speedruntimer.shown": "Таймер показан",
   "msg.speedruntimer.hidden": "Таймер скрыт"
 }

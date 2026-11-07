@@ -31,15 +31,13 @@ public class TimerHudLayer {
         if (mc.level == null || mc.player == null) {
             return;
         }
-        if (TimerConfig.HIDE_IN_DEBUG.get() && mc.getDebugOverlay().showDebugScreen()) {
-            return;
-        }
 
         float partial = TimerConfig.SHOW_MILLISECONDS.get()
                 ? delta.getGameTimeDeltaPartialTick(false)
                 : 0F;
+        float msPerTick = mc.level.tickRateManager().millisecondsPerTick();
         String rta = "RTA: " + clock(TimerState.rtaMillis());
-        String igt = "IGT: " + clock(TimerState.igtMillis(partial));
+        String igt = "IGT: " + clock(TimerState.igtMillis(partial, msPerTick));
 
         var font = mc.font;
         int textW = Math.max(font.width(rta), font.width(igt));
@@ -98,6 +96,12 @@ public class TimerHudLayer {
         graphics.text(font, igt, right ? textW - font.width(igt) : 0, LINE_HEIGHT, igtColor, shadow);
 
         graphics.pose().popMatrix();
+    }
+
+    /** Сброс состояния перетаскивания: HUD-прямоугольник живёт только внутри мира. */
+    static void cancelDrag() {
+        dragging = false;
+        lastValid = false;
     }
 
     public static void onMousePressed(ScreenEvent.MouseButtonPressed.Pre event) {
@@ -183,7 +187,7 @@ public class TimerHudLayer {
         graphics.fill(w + 2, -3, w + 3, h + 3, OUTLINE);
     }
 
-    private static String clock(long ms) {
+    static String clock(long ms) {
         long h = ms / 3_600_000L;
         long m = ms / 60_000L % 60L;
         long s = ms / 1_000L % 60L;

@@ -6,6 +6,7 @@
   "msg.speedruntimer.reset": "Timer restarted",
   "msg.speedruntimer.paused": "Timer paused",
   "msg.speedruntimer.resumed": "Timer resumed",
+  "msg.speedruntimer.restored": "Run recovered after a crash: RTA %s, IGT %s",
   "msg.speedruntimer.shown": "Timer shown",
   "msg.speedruntimer.hidden": "Timer hidden"
 }
