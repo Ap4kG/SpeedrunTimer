@@ -12,6 +12,10 @@ base {
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
+java {
+    withSourcesJar()
+}
+
 neoForge {
     version = '26.3.0.101'
 
